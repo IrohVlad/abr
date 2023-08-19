@@ -1,22 +1,39 @@
 <script>
 import product from '~/feature/product/product.vue'
-import {useCards} from '~/state/states.js'
+import sortParam from '~/feature/sortParam/sortParam.vue'
+import productTypes from '~/feature/productTypes/productTypes.vue'
+import {useCards, useParams} from '~/state/states.js'
 export default {
     name: 'products',
     components: {
-        product
+        product,
+        sortParam,
+        productTypes
     },
-    setup() {
+    async setup() {
         const cards = useCards();
-        return {cards}
+        const params = useParams();
+    
+      return {cards, params}
     }
 }
 </script>
 <template>
     <section class="products-section _container">
         <div class="section__title">Наши товары</div>
-        <div class="products">
-            <product v-for="card in cards" :title="card.title" :details="card.details" :price="card.price" :img="card.img" :id="card.id" :key="card.id" />
+        <div class="products-grid">
+            <div class="products-sidebar">
+                <div class="sidebar">
+                    <productTypes/>
+                    <div class="params">
+                        <sortParam v-for="param in params" :id="param.id" :title="param.attributes.title" :values="param.attributes.param_values" />
+                    </div>
+                </div>
+            </div>
+            <div class="products">
+                <product  v-for="card in cards" :key="card.id" :img="card.attributes.photo.data" :title="card.attributes.title" :details="card.attributes.details" :price="card.attributes.price" :id="card.id" />
+
+            </div>
         </div>
     </section>
 </template>
@@ -28,11 +45,30 @@ export default {
         font-size: 40px;
         margin-bottom: 30px;
     }
-    .products{
+    .products-grid{
         display: grid;
-        gap: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        
+        grid-template-columns: 250px 1fr;
+        gap: 15px;
+        .products-sidebar{
+            .sidebar{
+                width: 100%;
+                height: fit-content;
+                min-height: 500px;
+                background-color: rgb(17, 17, 17);
+                border-radius: 10px;
+                padding: 15px;
+                box-sizing: border-box;
+                
+                .params{
+                    color: white;
+                }
+            }
+        }
+        .products{
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
     }
     
 </style>

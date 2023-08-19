@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "param_values",
+  "info": {
+    "singularName": "param-value",
+    "pluralName": "param-values",
+    "displayName": "param value",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "value": {
+      "type": "string"
+    },
+    "param": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::param.param",
+      "inversedBy": "param_values"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "mappedBy": "param_values"
+    }
+  }
+}

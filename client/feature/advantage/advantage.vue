@@ -1,7 +1,7 @@
 <template>
     <div class="advantage" >
         <div class="icon">
-            {{ icon }}
+            <img :src="icon" alt="">
         </div>
         <div class="title">
             {{ title }}
@@ -47,7 +47,7 @@ export default {
 
 
                     height: 100px;
-                    svg{
+                    img{
                         width: 100%;
                         height: 100%;
                     }

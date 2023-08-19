@@ -1,8 +1,8 @@
 <template>
-    <NuxtLink :to="id.toString()">
+    <NuxtLink :to="''+id">
         <div class="product">
         <div class="product__img">
-            <img :src="img" alt="">
+            <img :src="img ? 'http://localhost:1337'+img.attributes.url : ''" alt="">
         </div>
         <div class="line">
             <div class="product__title">{{ title }}</div>
@@ -35,6 +35,7 @@ export default {
             box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.213);
             border-radius: 5px;
             transition-property: box-shadow, transform;
+            color: black;
             transition-duration: .3s, .3s;
             &:hover{
                 box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.213);
@@ -47,7 +48,11 @@ export default {
                 justify-content: center;
                 margin-bottom: 10px;
                 img{
+                    will-change: transform;
+                    object-fit: cover;
+                    object-position: center;
                     height: 100%;
+                    width: 100%;
                 }
             }
             .line{

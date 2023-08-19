@@ -3,16 +3,20 @@
         <div class="header _container">
             <ul class="header__upper-line">
                <li class="line-item">
-                <div class="icon">
+                <a target="_blank" :href="'mailto:'+general.email">
+                    <div class="icon">
                     <img src="./mail.svg" alt="mail"/>
-                </div>
-                166vlad@gmail.com
+                    </div>
+                    {{ general.email }}
+                </a>
                </li> 
                <li class="line-item">
-                <div class="icon">
+                <a :href="'mailto:'+general.number">
+                    <div class="icon">
                     <img src="./phone.svg" alt="phone"/>
-                </div>
-                +77777777777
+                    </div>
+                    +{{ general.number }}
+                </a>
                </li> 
             </ul>
             <div class="header__bottom-line">
@@ -22,10 +26,8 @@
                 </div>
                 <nav>
                     <ul class="nav">
-                        <li class="nav-item _no-select">Главная</li>
-                        <li class="nav-item _no-select">Контакты</li>
-                        <li class="nav-item _no-select">Информация</li>
-                        <li class="nav-item _no-select">Списки</li>
+                        <NuxtLink to="/" class="nav-item _no-select">Главная</NuxtLink>
+                    <NuxtLink to="/contacts" class="nav-item _no-select">О нас</NuxtLink>
                     </ul>
                 </nav>
                 <div class="right">
@@ -40,10 +42,9 @@
             <div class="modal-area">
                 <nav>
                 <ul class="nav">
-                    <li class="nav-item _no-select">Главная</li>
-                    <li class="nav-item _no-select">Контакты</li>
-                    <li class="nav-item _no-select">Информация</li>
-                    <li class="nav-item _no-select">Списки</li>
+                    <NuxtLink to="/" class="nav-item _no-select">Главная</NuxtLink>
+                    <NuxtLink to="/contacts" class="nav-item _no-select">О нас</NuxtLink>
+
                 </ul>
             </nav>
             </div>
@@ -53,6 +54,7 @@
 
 <script>
 import headerSearch from '../../feature/headerSearch/headerSearch.vue'
+import { useGeneral } from '~/state/states';
  export default {
     name: 'header',
     components: {
@@ -63,7 +65,10 @@ import headerSearch from '../../feature/headerSearch/headerSearch.vue'
             modal: false
         }
     },
-    
+    setup () {
+        const general = useGeneral();
+        return {general}
+    },
     methods: {
         openModal(){
             this.modal = true;
@@ -188,17 +193,21 @@ header{
                 }
                 font-size: 14px;
                 font-weight: 300;
+                a{
                 display: flex;
                 align-items: center;
+                color: white;
                 .icon{
                     height: 20px;
                     width: 20px;
                     margin-right: 7px;
+                    
                     img{
                         height:100%;
                         width: 100%;
                         color: green;
                     }
+                }
                 }
             }
         }

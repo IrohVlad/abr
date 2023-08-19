@@ -4,7 +4,8 @@
   "info": {
     "singularName": "product",
     "pluralName": "products",
-    "displayName": "product"
+    "displayName": "product",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -15,14 +16,15 @@
       "type": "string"
     },
     "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "details": {
       "type": "string"
@@ -32,6 +34,18 @@
     },
     "price": {
       "type": "decimal"
+    },
+    "param_values": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::param-value.param-value",
+      "inversedBy": "products"
+    },
+    "type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::type.type",
+      "inversedBy": "products"
     }
   }
 }

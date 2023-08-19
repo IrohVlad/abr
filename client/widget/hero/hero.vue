@@ -1,53 +1,87 @@
-<template>
-    <section class="hero-section">
-        <div @click="indexIncrease" :class='scroll ? "background scrolled" : "background"'>
-            <div class="slide-status">
-                <div class="line"></div>
-            </div>
-        </div>
-        <heroSlide
-            :text="'Лучшие абразивы в мире'+ slideIndex" 
-            :subtext="'Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit excepturi nihil provident libero ut ipsam unde obcaecati assumenda facere. Quo sit quia doloribus harum voluptatibus quod illo necessitatibus saepe facere?'" 
-            :img="'../../assets/st1-1.png'"
-        />
-    </section>
-</template>
-
 <script>
 import heroSlide from '../../feature/hero-slide/hero-slide'
+import { useSlides } from '~/state/states';
 export default {
     name: 'hero',
     components: {
         heroSlide
     },
-    data(){
-        return{
-            slideIndex: 0,
-            scroll: false
-        }
-    }, 
-    
-    methods: {
-        indexIncrease(){
-            this.slideIndex++;
-            console.log('coc')
-        },
-        onScroll(){
+    // data(){
+    //     return{
+    //         slideIndex: 0,
+    //         scroll: false
+    //     }
+    // }, 
+    async setup(){
+        const slides = useSlides();
+        const slideIndex = ref(0);
+        const scroll = ref(false);
+        function onscroll(){
             if(window.scrollY == 0){
-                    this.scroll = false;
-                    console.log(this.scroll)
-                } else{
-                    this.scroll = true;
-                    console.log(this.scroll)
-                }
+                    scroll.value = false;
+            } else{
+                    scroll.value = true;
+            }
         }
+        onMounted(()=>{
+            document.addEventListener('scroll', onscroll)
+            setInterval(()=>{
+                if(!slides.value.loading){
+                    if(slideIndex.value == slides.value.data.data.length - 1){
+                        slideIndex.value = 0;
+                    } else {
+                        slideIndex.value++
+                    }
+                }
+            }, 10000)
+        })
+      try{
+        const {find} = useStrapi();
+        let response = await find('slides?populate=*');
+        slides.value.data = response;
+        console.log(slides.value.data.data)
+        slides.value.loading = false;
+      } catch {
+        slides.value.loading = false;
+        console.error('data fetch error')
+      }
+      return {slideIndex, slides, scroll, onscroll}
     },
-    mounted(){
-            document.addEventListener('scroll', this.onScroll)
-    }
+    
+    // methods: {
+    //     indexIncrease(){
+    //         this.slideIndex++;
+    //         console.log('coc')
+    //     },
+    //     onScroll(){
+    //         if(window.scrollY == 0){
+    //                 this.scroll = false;
+    //                 console.log(this.scroll)
+    //             } else{
+    //                 this.scroll = true;
+    //                 console.log(this.scroll)
+    //             }
+    //     }
+    // },
     
 }
 </script>
+<template>
+    <section class="hero-section">
+        <div :class='scroll ? "background scrolled" : "background"'>
+            <div class="slide-status">
+                <div class="line"></div>
+            </div>
+            
+        </div>
+        <heroSlide
+            v-if="!slides.loading"
+            :text="slides.data.data[slideIndex].attributes.text" 
+            :subtext="slides.data.data[slideIndex].attributes.description" 
+            :img="'http://localhost:1337'+slides.data.data[slideIndex].attributes.Photo.data.attributes.url "
+        />
+    </section>
+</template>
 
 <style lang="scss">
 @keyframes back-in{
