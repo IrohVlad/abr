@@ -2,7 +2,7 @@
   <div class="_wrapper">
     <NuxtLayout>
       <vheader/>
-      <NuxtPage/>
+      <!-- <NuxtPage/> -->
       <vfooter/>
     </NuxtLayout>
   </div>
@@ -12,6 +12,7 @@
 import header from './widget/header/header'
 import vfooter from '~/widget/footer/vfooter.vue'
 import {useCards, useTypes, useParams, useGeneral} from '~/state/states.js'
+import strapiFetch from './api'
 export default {
     components: {
         vheader: header,
@@ -22,30 +23,22 @@ export default {
         const types = useTypes();
         const params = useParams();
         const general = useGeneral();
-        
-        try{
         const {find} = useStrapi();
-        let response = await find('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo');
-        cards.value = response.data;
-        console.log(cards.value)
-        cards.value.loading = false;
-      } catch {
-        cards.value.loading = false;
-        console.error('data fetch error')
-      }
-      try{
-        const {find} = useStrapi();
-        let response = await find('general?populate[0]=photo');
-        general.value = response.data.attributes;
-      } catch {
-        console.error('data fetch error')
-      }
+
+        strapiFetch('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo', find, cards)
+        strapiFetch('general?populate[0]=photo', find, general)
+
+      // try{
+      //   let response = await find('general?populate[0]=photo');
+      //   general.value = response.data.attributes;
+      // } catch {
+      //   console.error('data fetch error2')
+      // }
       watch(types, async (newTypes) => {
         console.log(newTypes)
         const type = newTypes.find(item => item.active == true)
         try{
           console.log('срабат')
-                        const {find} = useStrapi();
                         if(type){
                             let response = await find(`products`,
                         {
@@ -106,7 +99,7 @@ export default {
                         
                     } catch {
                         cards.value.loading = false;
-                        console.error('data fetch error')
+                        console.error('data fetch error3')
                     }
       }, {deep: true})
       watch(params, async (newParams)=>{
@@ -120,7 +113,6 @@ export default {
             })
         })
         try{
-                        const {find} = useStrapi();
                         let response = await find(`products`,
                         {
                             fields: [
@@ -146,7 +138,7 @@ export default {
                         cards.value.loading = false;
                     } catch {
                         cards.value.loading = false;
-                        console.error('data fetch error')
+                        console.error('data fetch error4')
                     }
 
       }, {deep: true})

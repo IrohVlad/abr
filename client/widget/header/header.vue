@@ -3,20 +3,22 @@
         <div class="header _container">
             <ul class="header__upper-line">
                <li class="line-item">
-                <a target="_blank" :href="'mailto:'+general.email">
+                <a v-if="!general.loading" target="_blank" :href="'mailto:'+general.data.attributes.email">
                     <div class="icon">
                     <img src="./mail.svg" alt="mail"/>
                     </div>
-                    {{ general.email }}
+                    {{ general.data.attributes.email }}
                 </a>
+                <div v-else>load</div>
                </li> 
                <li class="line-item">
-                <a :href="'mailto:'+general.number">
+                <a v-if="!general.loading" :href="'mailto:'+general.data.attributes.number">
                     <div class="icon">
                     <img src="./phone.svg" alt="phone"/>
                     </div>
-                    +{{ general.number }}
+                    +{{ general.data.attributes.number }}
                 </a>
+                <div v-else>load</div>
                </li> 
             </ul>
             <div class="header__bottom-line">
