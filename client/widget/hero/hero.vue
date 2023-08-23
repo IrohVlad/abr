@@ -78,7 +78,7 @@ export default {
             v-if="!slides.loading"
             :text="slides.data.data[slideIndex].attributes.text" 
             :subtext="slides.data.data[slideIndex].attributes.description" 
-            :img="'http://localhost:1337'+slides.data.data[slideIndex].attributes.Photo.data.attributes.url "
+            :img="'https://all-trader.ru'+slides.data.data[slideIndex].attributes.Photo.data.attributes.url "
         />
     </section>
 </template>

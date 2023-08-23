@@ -2,11 +2,11 @@
     <section class="advantages-section">
         <div class="advantages _container">
             
-            <advantage :title="data.title1" :icon="'http://localhost:1337'+data.icon1.data.attributes.url"
+            <advantage :title="data.title1" :icon="'https://all-trader.ru'+data.icon1.data.attributes.url"
                 :text="data.description1"/>
-            <advantage :title="data.title2" :icon="'http://localhost:1337'+data.icon2.data.attributes.url"
+            <advantage :title="data.title2" :icon="'https://all-trader.ru'+data.icon2.data.attributes.url"
                 :text="data.description2"/>
-            <advantage :title="data.title3" :icon="'http://localhost:1337'+data.icon3.data.attributes.url"
+            <advantage :title="data.title3" :icon="'https://all-trader.ru'+data.icon3.data.attributes.url"
                 :text="data.description3"/>
         </div>
     </section>

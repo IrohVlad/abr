@@ -6,7 +6,7 @@
                     {{ data.title }}
                 </div>
                 <div class="icon">
-                    <img :src="'http://localhost:1337'+data.photo.data.attributes.url" alt="">
+                    <img :src="'https://all-trader.ru'+data.photo.data.attributes.url" alt="">
                 </div>
                 <div class="line">
                     <div class="price">{{ data.price + '₽' }}</div>

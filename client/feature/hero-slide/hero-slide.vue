@@ -99,6 +99,8 @@ export default {
                     font-size: 45px;
                     font-weight: 700;
                     margin-bottom: 10px;
+                    background-color: rgb(17, 17, 17);
+                    display: inline-block;
                 }
                 .hero-subtitle{
                     font-size: 13px;

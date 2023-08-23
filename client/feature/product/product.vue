@@ -2,7 +2,7 @@
     <NuxtLink :to="''+id">
         <div class="product">
         <div class="product__img">
-            <img :src="img ? 'http://localhost:1337'+img.attributes.url : ''" alt="">
+            <img :src="img ? 'https://all-trader.ru'+img.attributes.url : ''" alt="">
         </div>
         <div class="line">
             <div class="product__title">{{ title }}</div>

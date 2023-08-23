@@ -3,7 +3,7 @@
         <section class="contacts-section">
             <div class="contacts _container">
                 <div class="photo">
-                    <img :src="'http://localhost:1337'+ general.photo.data.attributes.url" alt="">
+                    <img :src="'https://all-trader.ru'+ general.photo.data.attributes.url" alt="">
                 </div>
                 <p class="texts">
                     {{ general.description || '' }}
