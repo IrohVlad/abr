@@ -9,7 +9,17 @@
                     </div>
                     {{ general.data.attributes.email }}
                 </a>
-                <div v-else>load</div>
+                <content-loader 
+                    v-else
+                    viewBox="0 0 100 23"
+                    width="100"
+                    height="23"
+                    :speed="2"
+                    primaryColor="#363636"
+                    secondaryColor="#cfcece"
+                >
+                    <rect x="0" y="5" rx="6" ry="6" width="100" height="18" />
+                </content-loader>
                </li> 
                <li class="line-item">
                 <a v-if="!general.loading" :href="'mailto:'+general.data.attributes.number">
@@ -18,7 +28,17 @@
                     </div>
                     +{{ general.data.attributes.number }}
                 </a>
-                <div v-else>load</div>
+                <content-loader 
+                    v-else
+                    viewBox="0 0 100 23"
+                    width="100"
+                    height="23"
+                    :speed="2"
+                    primaryColor="#363636"
+                    secondaryColor="#cfcece"
+                >
+                    <rect x="0" y="5" rx="6" ry="6" width="100" height="18" />
+                </content-loader>
                </li> 
             </ul>
             <div class="header__bottom-line">
@@ -46,7 +66,6 @@
                 <ul class="nav">
                     <NuxtLink to="/" class="nav-item _no-select">Главная</NuxtLink>
                     <NuxtLink to="/contacts" class="nav-item _no-select">О нас</NuxtLink>
-
                 </ul>
             </nav>
             </div>
@@ -57,10 +76,12 @@
 <script>
 import headerSearch from '../../feature/headerSearch/headerSearch.vue'
 import { useGeneral } from '~/state/states';
+import { ContentLoader } from "vue-content-loader"
  export default {
     name: 'header',
     components: {
-        headerSearch
+        headerSearch,
+        ContentLoader
     },
     data() {
         return {
