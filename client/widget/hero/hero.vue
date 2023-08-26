@@ -1,10 +1,12 @@
 <script>
 import heroSlide from '../../feature/hero-slide/hero-slide'
 import { useSlides } from '~/state/states';
+import { ContentLoader } from "vue-content-loader"
 export default {
     name: 'hero',
     components: {
-        heroSlide
+        heroSlide,
+        ContentLoader
     },
     // data(){
     //     return{
@@ -18,16 +20,6 @@ export default {
         const slideIndex = ref(0);
         const scroll = ref(false);
 
-        const {data: sli, error} = await useAsyncData('slides', ()=> find('slides?populate=*'))
-        if(sli.value){
-            slides.value.data = sli.value.data;
-            slides.value.loading = false;
-        } else if (error) {
-            slides.value.errors = error;
-            slides.value.loading = false;
-            console.log( error)
-        }
-
         function onscroll(){
             if(window.scrollY == 0){
                     scroll.value = false;
@@ -39,7 +31,7 @@ export default {
             document.addEventListener('scroll', onscroll)
             setInterval(()=>{
                 if(!slides.value.loading){
-                    if(slideIndex.value == slides.value.data.data.length - 1){
+                    if(slideIndex.value == slides.value.data.length - 1){
                         slideIndex.value = 0;
                     } else {
                         slideIndex.value++
@@ -47,34 +39,18 @@ export default {
                 }
             }, 10000)
         })
-    //   try{
-    //     const {find} = useStrapi();
-    //     let response = await find('slides?populate=*');
-    //     slides.value.data = response;
-    //     console.log(slides.value.data.data)
-    //     slides.value.loading = false;
-    //   } catch {
-    //     slides.value.loading = false;
-    //     console.error('data fetch error')
-    //   }
+
+        const {data: sli, error} = await useAsyncData('slides', ()=> find('slides?populate=*'))
+        if(sli.value){
+            slides.value.data = sli.value.data;
+            slides.value.loading = false;
+        } else if (error) {
+            slides.value.errors = error;
+            slides.value.loading = false;
+            console.log(error)
+        }
       return {slideIndex, slides, scroll, onscroll}
     },
-    
-    // methods: {
-    //     indexIncrease(){
-    //         this.slideIndex++;
-    //         console.log('coc')
-    //     },
-    //     onScroll(){
-    //         if(window.scrollY == 0){
-    //                 this.scroll = false;
-    //                 console.log(this.scroll)
-    //             } else{
-    //                 this.scroll = true;
-    //                 console.log(this.scroll)
-    //             }
-    //     }
-    // },
     
 }
 </script>
@@ -87,11 +63,24 @@ export default {
             
         </div>
         <heroSlide
-            v-if="!slides.loading && !slides.errors"
-            :text="slides.data.data[slideIndex].attributes.text" 
-            :subtext="slides.data.data[slideIndex].attributes.description" 
-            :img="'https://all-trader.ru'+slides.data.data[slideIndex].attributes.Photo.data.attributes.url "
+            v-if="!slides.loading && slides.data.length && !slides.errors"
+            :text="slides.data[slideIndex].attributes.text" 
+            :subtext="slides.data[slideIndex].attributes.description" 
+            :img="'https://all-trader.ru'+slides.data[slideIndex].attributes.Photo.data.attributes.url "
         />
+        <div v-else-if="slides.errors" class="reload">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="white"/></svg>
+        </div>
+        <div v-else class="hero _container skeleton">
+            <div class='texts'>
+                <div class="hero-title"></div>
+                <div class="hero-subtitle"></div>
+            </div>
+            <div class="hero-img">
+
+            </div>
+        </div>
+
     </section>
 </template>
 
@@ -104,6 +93,26 @@ export default {
         width: 40%;
     }
 }
+    .skeleton{
+        .hero-title{
+            height: 30px;
+            width: 250px;
+            border-radius: 10px;
+            background-color: gray;
+        }
+        .hero-subtitle{
+            height: 20px;
+            border-radius: 5px;
+            width: 200px;
+            background-color: gray;
+        }
+        .hero-img{
+            background-color: gray;
+            height: 350px;
+            border-radius: 10px;
+            width: 350px;
+        }
+    }
     .hero-section{
         margin-top: 130px;
         position: relative;
