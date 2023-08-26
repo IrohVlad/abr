@@ -24,14 +24,14 @@ export default {
         <div class="products-grid">
             <div class="products-sidebar">
                 <div class="sidebar">
-                    <productTypes/>
+                    <!-- <productTypes/>
                     <div class="params">
                         <sortParam v-for="param in params" :id="param.id" :title="param.attributes.title" :values="param.attributes.param_values" />
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="products">
-                <product  v-for="card in cards" :key="card.id" :img="card.attributes.photo.data" :title="card.attributes.title" :details="card.attributes.details" :price="card.attributes.price" :id="card.id" />
+                <!-- <product  v-for="card in cards" :key="card.id" :img="card.attributes.photo.data" :title="card.attributes.title" :details="card.attributes.details" :price="card.attributes.price" :id="card.id" /> -->
 
             </div>
         </div>

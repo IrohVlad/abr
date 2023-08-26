@@ -3,12 +3,15 @@
         <div class="header _container">
             <ul class="header__upper-line">
                <li class="line-item">
-                <a v-if="!general.loading" target="_blank" :href="'mailto:'+general.data.attributes.email">
+                <a v-if="!general.loading && !general.errors" target="_blank" :href="'mailto:'+general.data.attributes.email">
                     <div class="icon">
                     <img src="./mail.svg" alt="mail"/>
                     </div>
                     {{ general.data.attributes.email }}
                 </a>
+                <div v-else-if="general.errors" class="reload">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="white"/></svg>
+                </div>
                 <content-loader 
                     v-else
                     viewBox="0 0 100 23"
@@ -22,12 +25,15 @@
                 </content-loader>
                </li> 
                <li class="line-item">
-                <a v-if="!general.loading" :href="'mailto:'+general.data.attributes.number">
+                <a v-if="!general.loading && !general.errors" :href="'mailto:'+general.data.attributes.number">
                     <div class="icon">
                     <img src="./phone.svg" alt="phone"/>
                     </div>
                     +{{ general.data.attributes.number }}
                 </a>
+                <div v-else-if="general.errors" class="reload">
+                  
+                </div>
                 <content-loader 
                     v-else
                     viewBox="0 0 100 23"
@@ -108,7 +114,12 @@ import { ContentLoader } from "vue-content-loader"
 </script>
 
 <style lang="scss">
-
+    .reload{
+        height: 20px;
+        svg{
+            height: 20px;
+        }
+    }
 header{
     @keyframes header-animate {
         0%{

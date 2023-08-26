@@ -14,8 +14,20 @@ export default {
     // }, 
     async setup(){
         const slides = useSlides();
+        const {find} = useStrapi();
         const slideIndex = ref(0);
         const scroll = ref(false);
+
+        const {data: sli, error} = await useAsyncData('slides', ()=> find('slides?populate=*'))
+        if(sli.value){
+            slides.value.data = sli.value.data;
+            slides.value.loading = false;
+        } else if (error) {
+            slides.value.errors = error;
+            slides.value.loading = false;
+            console.log( error)
+        }
+
         function onscroll(){
             if(window.scrollY == 0){
                     scroll.value = false;
@@ -35,16 +47,16 @@ export default {
                 }
             }, 10000)
         })
-      try{
-        const {find} = useStrapi();
-        let response = await find('slides?populate=*');
-        slides.value.data = response;
-        console.log(slides.value.data.data)
-        slides.value.loading = false;
-      } catch {
-        slides.value.loading = false;
-        console.error('data fetch error')
-      }
+    //   try{
+    //     const {find} = useStrapi();
+    //     let response = await find('slides?populate=*');
+    //     slides.value.data = response;
+    //     console.log(slides.value.data.data)
+    //     slides.value.loading = false;
+    //   } catch {
+    //     slides.value.loading = false;
+    //     console.error('data fetch error')
+    //   }
       return {slideIndex, slides, scroll, onscroll}
     },
     
@@ -75,7 +87,7 @@ export default {
             
         </div>
         <heroSlide
-            v-if="!slides.loading"
+            v-if="!slides.loading && !slides.errors"
             :text="slides.data.data[slideIndex].attributes.text" 
             :subtext="slides.data.data[slideIndex].attributes.description" 
             :img="'https://all-trader.ru'+slides.data.data[slideIndex].attributes.Photo.data.attributes.url "

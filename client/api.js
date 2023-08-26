@@ -3,7 +3,7 @@ export default async function strapiFetch(route, getter, state, filters = null){
         let response = await getter(route, filters);
         state.value.data = response.data;
         state.value.loading = false;
-        console.log(state.value)
+        // console.log(state.value)
       } catch(e) {
         state.value.loading = false;
         console.error(e)

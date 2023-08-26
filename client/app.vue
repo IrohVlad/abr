@@ -2,7 +2,7 @@
   <div class="_wrapper">
     <NuxtLayout>
       <vheader/>
-      <!-- <NuxtPage/> -->
+      <NuxtPage/>
       <vfooter/>
     </NuxtLayout>
   </div>
@@ -25,8 +25,21 @@ export default {
         const general = useGeneral();
         const {find} = useStrapi();
 
-        strapiFetch('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo', find, cards)
-        strapiFetch('general?populate[0]=photo', find, general)
+        // const {data: products} = await useAsyncData('products', ()=> find('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo'))
+        // cards.value.data = products.value.data;
+        // cards.value.loading = false;
+        const {data: gen, error} = await useAsyncData('general', ()=> find('general?populate[0]=photo'))
+        console.log(gen)
+        if(gen.value){
+            general.value.data = gen.value.data;
+            general.value.loading = false;
+        } else if (error) {
+          general.value.errors = error;
+          general.value.loading = false;
+          console.log( error)
+        }
+        // strapiFetch('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo', find, cards)
+        // strapiFetch('general?populate[0]=photo', find, general)
 
       // try{
       //   let response = await find('general?populate[0]=photo');
@@ -34,114 +47,114 @@ export default {
       // } catch {
       //   console.error('data fetch error2')
       // }
-      watch(types, async (newTypes) => {
-        console.log(newTypes)
-        const type = newTypes.find(item => item.active == true)
-        try{
-          console.log('срабат')
-                        if(type){
-                            let response = await find(`products`,
-                        {
-                            fields: [
-                                'title',
-                                'details',
-                                'price'
-                            ],
-                            populate: [
-                                'photo'
-                            ],
-                            filters: {
-                                $and: [
-                                    {
-                                        type: type.id
-                                    }
-                                ]
-                            }
-                        });
-                        let response2 = await find(`params`,
-                        {
-                            fields: [
-                                'title',
-                            ],
-                            populate: [
-                                'param_values'
-                            ],
-                            filters: {
-                                $and: [
-                                    {
-                                        type: type.id 
-                                    }
-                                ]
-                            }
-                        });
-                        cards.value = response.data;
-                        params.value = response2.data
-                        console.log(params.value)
-                        cards.value.loading = false;
-                        } else {
-                            let response = await find(`products`,
-                        {
-                            fields: [
-                                'title',
-                                'details',
-                                'price'
-                            ],
-                            populate: [
-                                'photo'
-                            ]
-                        });
+    //   watch(types, async (newTypes) => {
+    //     console.log(newTypes)
+    //     const type = newTypes.find(item => item.active == true)
+    //     try{
+    //       console.log('срабат')
+    //                     if(type){
+    //                         let response = await find(`products`,
+    //                     {
+    //                         fields: [
+    //                             'title',
+    //                             'details',
+    //                             'price'
+    //                         ],
+    //                         populate: [
+    //                             'photo'
+    //                         ],
+    //                         filters: {
+    //                             $and: [
+    //                                 {
+    //                                     type: type.id
+    //                                 }
+    //                             ]
+    //                         }
+    //                     });
+    //                     let response2 = await find(`params`,
+    //                     {
+    //                         fields: [
+    //                             'title',
+    //                         ],
+    //                         populate: [
+    //                             'param_values'
+    //                         ],
+    //                         filters: {
+    //                             $and: [
+    //                                 {
+    //                                     type: type.id 
+    //                                 }
+    //                             ]
+    //                         }
+    //                     });
+    //                     cards.value = response.data;
+    //                     params.value = response2.data
+    //                     console.log(params.value)
+    //                     cards.value.loading = false;
+    //                     } else {
+    //                         let response = await find(`products`,
+    //                     {
+    //                         fields: [
+    //                             'title',
+    //                             'details',
+    //                             'price'
+    //                         ],
+    //                         populate: [
+    //                             'photo'
+    //                         ]
+    //                     });
                         
-                        cards.value = response.data;
-                        params.value = []
-                        console.log(params.value)
-                        cards.value.loading = false;
-                        }
+    //                     cards.value = response.data;
+    //                     params.value = []
+    //                     console.log(params.value)
+    //                     cards.value.loading = false;
+    //                     }
                         
-                    } catch {
-                        cards.value.loading = false;
-                        console.error('data fetch error3')
-                    }
-      }, {deep: true})
-      watch(params, async (newParams)=>{
-        const type = types.value.find(item => item.active == true)
-        const paramsArray = [];
-        newParams.forEach((item)=>{
-            item.attributes.param_values.data.forEach((ite)=>{
-                if(ite.active){
-                    paramsArray.push({param_values: ite.id})
-                }
-            })
-        })
-        try{
-                        let response = await find(`products`,
-                        {
-                            fields: [
-                                'title',
-                                'details',
-                                'price'
-                            ],
-                            populate: [
-                                'photo'
-                            ],
-                            filters: {
-                                $and: [
-                                    {
-                                        type: type.id,
+    //                 } catch {
+    //                     cards.value.loading = false;
+    //                     console.error('data fetch error3')
+    //                 }
+    //   }, {deep: true})
+    //   watch(params, async (newParams)=>{
+    //     const type = types.value.find(item => item.active == true)
+    //     const paramsArray = [];
+    //     newParams.forEach((item)=>{
+    //         item.attributes.param_values.data.forEach((ite)=>{
+    //             if(ite.active){
+    //                 paramsArray.push({param_values: ite.id})
+    //             }
+    //         })
+    //     })
+    //     try{
+    //                     let response = await find(`products`,
+    //                     {
+    //                         fields: [
+    //                             'title',
+    //                             'details',
+    //                             'price'
+    //                         ],
+    //                         populate: [
+    //                             'photo'
+    //                         ],
+    //                         filters: {
+    //                             $and: [
+    //                                 {
+    //                                     type: type.id,
                                         
-                                    },
-                                    ...paramsArray
-                                ]
-                            }
-                        });
+    //                                 },
+    //                                 ...paramsArray
+    //                             ]
+    //                         }
+    //                     });
                         
-                        cards.value = response.data;
-                        cards.value.loading = false;
-                    } catch {
-                        cards.value.loading = false;
-                        console.error('data fetch error4')
-                    }
+    //                     cards.value = response.data;
+    //                     cards.value.loading = false;
+    //                 } catch {
+    //                     cards.value.loading = false;
+    //                     console.error('data fetch error4')
+    //                 }
 
-      }, {deep: true})
+    //   }, {deep: true})
     }
 }
 </script>

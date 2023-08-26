@@ -2,12 +2,12 @@
     <section class="advantages-section">
         <div class="advantages _container">
             
-            <advantage :title="data.title1" :icon="'https://all-trader.ru'+data.icon1.data.attributes.url"
-                :text="data.description1"/>
-            <advantage :title="data.title2" :icon="'https://all-trader.ru'+data.icon2.data.attributes.url"
-                :text="data.description2"/>
-            <advantage :title="data.title3" :icon="'https://all-trader.ru'+data.icon3.data.attributes.url"
-                :text="data.description3"/>
+            <!-- <advantage v-if="!data.loading" :title="data.data.title1" :icon="'https://all-trader.ru'+data.data.icon1.data.attributes.url"
+                :text="data.data.description1"/>
+            <advantage v-if="!data.loading" :title="data.data.title2" :icon="'https://all-trader.ru'+data.data.icon2.data.attributes.url"
+                :text="data.data.description2"/>
+            <advantage v-if="!data.loading" :title="data.data.title3" :icon="'https://all-trader.ru'+data.data.icon3.data.attributes.url"
+                :text="data.data.description3"/> -->
         </div>
     </section>
 </template>
@@ -20,14 +20,16 @@ export default {
         advantage
     },
     async setup () {
-        const data = ref({})
-        try{
-        const {find} = useStrapi();
-        let response = await find('advantage?populate[0]=icon1&populate[1]=icon2&populate[2]=icon3');
-        data.value = response.data.attributes;
-      } catch {
-        console.error('data fetch error')
-      }
+        const data = ref({data: {}, loading: true})
+    //     try{
+    //     const {find} = useStrapi();
+    //     let response = await find('advantage?populate[0]=icon1&populate[1]=icon2&populate[2]=icon3');
+    //     data.value.data = response.data.attributes;
+    //     data.value.loading = false;
+    //   } catch {
+    //     data.value.loading = false;
+    //     console.error('data fetch error')
+    //   }
       return {data}
     }
 }
