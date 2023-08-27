@@ -1,6 +1,6 @@
 <template>
     <main>
-        <section class="contacts-section">
+        <!-- <section class="contacts-section">
             <div class="contacts _container">
                 <div class="photo">
                     <img :src="'https://all-trader.ru'+ general.photo.data.attributes.url" alt="">
@@ -9,7 +9,7 @@
                     {{ general.description || '' }}
                 </p>
             </div>
-        </section>
+        </section> -->
     </main>
 </template>
 

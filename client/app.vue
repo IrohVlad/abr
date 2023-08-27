@@ -23,21 +23,21 @@ export default {
         const types = useTypes();
         const params = useParams();
         const general = useGeneral();
-        const {find} = useStrapi();
+        // const {find} = useStrapi();
 
         // const {data: products} = await useAsyncData('products', ()=> find('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo'))
         // cards.value.data = products.value.data;
         // cards.value.loading = false;
-        const {data: gen, error} = await useAsyncData('general', ()=> find('general?populate[0]=photo'))
-        console.log(gen)
-        if(gen.value){
-            general.value.data = gen.value.data;
-            general.value.loading = false;
-        } else if (error) {
-          general.value.errors = error;
-          general.value.loading = false;
-          console.log( error)
-        }
+        // const {data: gen, error} = await useAsyncData('general', ()=> find('general?populate[0]=photo'))
+        // console.log(gen)
+        // if(gen.value){
+        //     general.value.data = gen.value.data;
+        //     general.value.loading = false;
+        // } else if (error) {
+        //   general.value.errors = error;
+        //   general.value.loading = false;
+        //   console.log( error)
+        // }
         // strapiFetch('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo', find, cards)
         // strapiFetch('general?populate[0]=photo', find, general)
 

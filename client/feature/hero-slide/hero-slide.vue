@@ -82,9 +82,10 @@ export default {
             .hero-img{
                 position: relative;
                 z-index: 5;
-                height: 350px;
-                width: 350px;
-                img{
+                // height: 350px;
+                width: auto;
+                img, svg{
+                    min-height: 350px;
                     max-height: 100%;
                     max-width: 100%;
                 }

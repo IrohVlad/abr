@@ -40,7 +40,7 @@ export default {
             }, 10000)
         })
 
-        const {data: sli, error} = await useAsyncData('slides', ()=> find('slides?populate=*'))
+        const {data: sli, error, refresh} = await useAsyncData('slides', ()=> find('slides?populate=*'))
         if(sli.value){
             slides.value.data = sli.value.data;
             slides.value.loading = false;
@@ -49,7 +49,22 @@ export default {
             slides.value.loading = false;
             console.log(error)
         }
-      return {slideIndex, slides, scroll, onscroll}
+
+        async function reloadSli (){
+            slides.value.loading = true;
+            slides.value.errors = null;
+            await refresh()
+            if(sli.value){
+                slides.value.data = sli.value.data;
+                slides.value.loading = false;
+            } else if (error) {
+                slides.value.errors = error;
+                slides.value.loading = false;
+                slides.log( error)
+            }
+
+        }
+      return {slideIndex, slides, scroll, onscroll, reloadSli}
     },
     
 }
@@ -68,8 +83,10 @@ export default {
             :subtext="slides.data[slideIndex].attributes.description" 
             :img="'https://all-trader.ru'+slides.data[slideIndex].attributes.Photo.data.attributes.url "
         />
-        <div v-else-if="slides.errors" class="reload">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="white"/></svg>
+        <div v-else-if="slides.errors" class="hero _container">
+            <div @click="reloadSli" class="reload-hero">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="rgb(17, 17, 17)"/></svg>
+            </div>
         </div>
         <div v-else class="hero _container skeleton">
             <div class='texts'>
@@ -92,6 +109,10 @@ export default {
     100%{
         width: 40%;
     }
+}
+.reload-hero{
+    height: 100px;
+    width: 100px;
 }
     .skeleton{
         .hero-title{

@@ -9,7 +9,7 @@
                     </div>
                     {{ general.data.attributes.email }}
                 </a>
-                <div v-else-if="general.errors" class="reload">
+                <div @click="reloadGen" v-else-if="general.errors" class="reload">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="white"/></svg>
                 </div>
                 <content-loader 
@@ -94,9 +94,36 @@ import { ContentLoader } from "vue-content-loader"
             modal: false
         }
     },
-    setup () {
+    async setup () {
         const general = useGeneral();
-        return {general}
+        const {find} = useStrapi();
+
+        const {data: gen, error, refresh} = await useAsyncData('general', ()=> find('general?populate[0]=photo'))
+        console.log(gen)
+        if(gen.value){
+            general.value.data = gen.value.data;
+            general.value.loading = false;
+        } else if (error) {
+          general.value.errors = error;
+          general.value.loading = false;
+          console.log( error)
+        }
+
+        async function reloadGen (){
+            general.value.loading = true;
+            general.value.errors = null;
+            await refresh()
+            if(gen.value){
+            general.value.data = gen.value.data;
+            general.value.loading = false;
+            } else if (error) {
+            general.value.errors = error;
+            general.value.loading = false;
+            console.log( error)
+            }
+
+        }
+        return {general, reloadGen}
     },
     methods: {
         openModal(){
