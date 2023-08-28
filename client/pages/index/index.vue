@@ -2,7 +2,7 @@
     <hero/>
     <advantages/>
     <!-- <searchParams/> -->
-    <!-- <products/> -->
+    <products/>
 </template>
 
 <script>
