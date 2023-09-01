@@ -1,9 +1,9 @@
 <template>
-    <li @click="setActive" :class="active ? 'type type-active' : 'type'">{{ title }}</li>
+    <NuxtLink :class="active ? 'type type-active' : 'type'" :to="active ? '/' : '/?type='+id">{{ title }}</NuxtLink>
 </template>
 
 <script>
-import {useTypes, useParams} from '~/state/states.js';
+// import {useTypes, useParams, useCards} from '~/state/states.js';
 export default {
     name: 'productType',
     props: [
@@ -12,23 +12,27 @@ export default {
         'id'
     ],
     setup(props){
-        const types = useTypes();
-        function setActive (){
-            types.value.forEach(element => {
-                if(element.id == props.id && !element.active){
-                    element.active = true
-                } else {
-                    element.active = false
-                }
-            });
-        }
-        return {setActive}
+        
+
+       
+
+        // function setActive (){
+        //     types.value.data.forEach(element => {
+        //         if(element.id == context.query.type && !element.active){
+        //             element.active = true
+        //         } else {
+        //             element.active = false
+        //         }
+        //     });
+        // }
+        return {}
     }
 }
 </script>
 
 <style scoped lang="scss">
                     .type{
+                        display: block;
                         cursor: pointer;
                         padding: 7px 0px;
                         color: white;

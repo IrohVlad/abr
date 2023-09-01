@@ -4,14 +4,14 @@
             {{ title }}
         </div>
         <ul :class=" state ? 'param__values show__values' : 'param__values'">
-            <sortParamItem v-for="value in values.data" :active="value.active" :param_id="id" :title="value.attributes.value" :id="value.id"/>
+            <sortParamItem v-for="value in values.data" :active="value.active" :param_id="id" :title="value.attributes.value" :id="value.id" :ids="values.data.map((val)=>val.id)"/>
         </ul>
     </div>
 </template>
 
 <script>
-import sortParamItem from '~/entity/sortParamItem/sortParamItem.vue';
-import { useParams } from '~/state/states';
+import sortParamItem from '~/shared/sortParamItem/sortParamItem.vue';
+import { useParams, useCards } from '~/state/states';
 export default {
     name: 'sortParam',
     components: {
@@ -24,7 +24,9 @@ export default {
     ],
     setup (props) {
         const params = useParams();
+        const cards = useCards();
         const state = ref(false);
+        const {find} = useStrapi();
         function openClose () {
             state.value = !state.value
         }

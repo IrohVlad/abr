@@ -1,13 +1,13 @@
 <script>
 import product from '~/feature/product/product.vue'
-import sortParam from '~/feature/sortParam/sortParam.vue'
+import sortParams from '~/feature/sortParams/sortParams.vue'
 import productTypes from '~/feature/productTypes/productTypes.vue'
 import {useCards, useParams} from '~/state/states.js'
 export default {
     name: 'products',
     components: {
         product,
-        sortParam,
+        sortParams,
         productTypes
     },
     async setup() {
@@ -25,7 +25,22 @@ export default {
             cards.value.loading = false;
           console.log( error)
         }
-      return {cards, params}
+
+        async function reloadPro (){
+            cards.value.loading = true;
+            cards.value.errors = null;
+            await refresh()
+            if(pro.value){
+                cards.value.data = pro.value.data;
+                cards.value.loading = false;
+            } else if (error) {
+                cards.value.errors = error;
+                cards.value.loading = false;
+                cards.log( error)
+            }
+
+        }
+      return {cards, params, reloadPro}
     }
 }
 </script>
@@ -35,15 +50,13 @@ export default {
         <div class="products-grid">
             <div class="products-sidebar">
                 <div class="sidebar">
-                    <!-- <productTypes/>
-                    <div class="params">
-                        <sortParam v-for="param in params" :id="param.id" :title="param.attributes.title" :values="param.attributes.param_values" />
-                    </div> -->
+                    <productTypes/>
+                    <sortParams/>
                 </div>
             </div>
             <div class="products">
                 <product v-if="!cards.loading && !cards.errors"  v-for="card in cards.data" :key="card.id" :img="card.attributes.photo.data" :title="card.attributes.title" :details="card.attributes.details" :price="card.attributes.price" :id="card.id" />
-                <div v-else-if="!cards.loading && cards.errors" class="reload-products" @click="reloadAdv">
+                <div v-else-if="!cards.loading && cards.errors" class="reload-products" @click="reloadPro">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="rgb(17, 17, 17)"/></svg>
                 </div>
             </div>
