@@ -1,15 +1,15 @@
 <template>
     <main>
-        <!-- <section class="contacts-section">
+        <section v-if="!general.loading && !general.errors" class="contacts-section">
             <div class="contacts _container">
                 <div class="photo">
-                    <img :src="'https://all-trader.ru'+ general.photo.data.attributes.url" alt="">
+                    <img :src="'https://all-trader.ru'+ general.data.attributes.photo.data.attributes.url" alt="">
                 </div>
                 <p class="texts">
-                    {{ general.description || '' }}
+                    {{ general.data.attributes.description || '' }}
                 </p>
             </div>
-        </section> -->
+        </section>
     </main>
 </template>
 

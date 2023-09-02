@@ -46,7 +46,7 @@ export default {
 </script>
 <template>
     <section class="products-section _container">
-        <div class="section__title">Наши товары</div>
+        <h2 class="section__title">Наши товары</h2>
         <div class="products-grid">
             <div class="products-sidebar">
                 <div class="sidebar">

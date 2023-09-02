@@ -1,6 +1,7 @@
 <template>
   <div class="_wrapper">
     <NuxtLayout>
+      <SeoKit />
       <vheader/>
       <NuxtPage/>
       <vfooter/>

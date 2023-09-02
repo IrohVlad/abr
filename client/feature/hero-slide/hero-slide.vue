@@ -2,8 +2,8 @@
     <transition name="slide-fade" mode="out-in">
         <div :key="text" class="hero _container">
             <div class='texts'>
-            <div class="hero-title">{{ text }}</div>
-            <div class="hero-subtitle">{{subtext}}</div>
+            <h1 class="hero-title">{{ text }}</h1>
+            <p class="hero-subtitle">{{subtext}}</p>
             </div>
             <div class="hero-img">
                 <img :src="img" alt="">

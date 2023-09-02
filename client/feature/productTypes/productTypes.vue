@@ -22,9 +22,12 @@ export default {
         const cards = useCards();
         const params = useParams();
 
+
+
         const queries = computed(()=>{
             return context.query
         })
+        
 
         const {data: typ, error, refresh} = await useAsyncData('types', ()=> find('types?fields[0]=title'))
 
@@ -52,15 +55,14 @@ export default {
         }
 
         watch(queries, async (newContext, oldContext)=>{
-            console.log(newContext)
-            if(oldContext.type != newContext.type){
+            if(!oldContext || oldContext.type != newContext.type){
                 types.value.data.forEach(element => {
                 if(element.id == newContext.type && !element.active){
                     element.active = true
                 } else {
                     element.active = false
                 }
-            });
+                });
                 const {data: pro, error: proErr} = await useAsyncData('products', ()=> find('products',
                                 {
                                 fields: [
@@ -111,7 +113,7 @@ export default {
                 
             }
             
-        }, {deep: true})
+        }, {deep: true, immediate: true})
 
       return {types, reloadTyp}
     }
