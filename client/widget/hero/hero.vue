@@ -149,6 +149,7 @@ export default {
             animation-iteration-count: 1;
             animation-fill-mode: forwards;
             background-color:rgb(17, 17, 17);
+            // background-color: red;
             transition-property: border-radius, top;
             transition-duration: 1s, 1s;
             &.scrolled{
