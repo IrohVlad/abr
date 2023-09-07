@@ -1,9 +1,9 @@
 <template>
-    <NuxtLink :class="active ? 'type type-active' : 'type'" :to="active ? '/' : '/?type='+id">{{ title }}</NuxtLink>
+    <NuxtLink @click="clearParams" :class="active ? 'type type-active' : 'type'" :to="'/products/type-'+id+'/page-1'">{{ title }}</NuxtLink>
 </template>
 
 <script>
-// import {useTypes, useParams, useCards} from '~/state/states.js';
+import { useSortParams } from '~/state/states.js';
 export default {
     name: 'productType',
     props: [
@@ -12,9 +12,13 @@ export default {
         'id'
     ],
     setup(props){
-        
-
-       
+        const context = useRoute()
+        const sortParams = useSortParams();
+        function clearParams(){
+            if(context.params.type != props.id){
+                sortParams.value = [];
+            }
+        }
 
         // function setActive (){
         //     types.value.data.forEach(element => {
@@ -25,7 +29,7 @@ export default {
         //         }
         //     });
         // }
-        return {}
+        return {sortParams, context, clearParams}
     }
 }
 </script>

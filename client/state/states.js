@@ -4,3 +4,5 @@ export const usePages = () => useState('pages', ()=> { return {page: 1, offset: 
 export const useTypes = () => useState('types', ()=> {return {data: [], loading: true, errors: null}});
 export const useParams = () => useState('params', ()=> {return {data: [], loading: true, errors: null}});
 export const useGeneral = () => useState('general', ()=> {return {data: {}, loading: true, errors: null}})
+
+export const useSortParams = () => useState('sortParams', ()=> [])

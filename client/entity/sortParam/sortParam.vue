@@ -4,7 +4,7 @@
             {{ title }}
         </div>
         <ul :class=" state ? 'param__values show__values' : 'param__values'">
-            <sortParamItem v-for="value in values.data" :active="value.active" :param_id="id" :title="value.attributes.value" :id="value.id" :ids="values.data.map((val)=>val.id)"/>
+            <sortParamItem v-for="value in values.data" :key="value.id" :active="value.active" :param_id="id" :title="value.attributes.value" :id="value.id" :ids="values.data.map((val)=>val.id)"/>
         </ul>
     </div>
 </template>
@@ -26,7 +26,6 @@ export default {
         const params = useParams();
         const cards = useCards();
         const state = ref(false);
-        const {find} = useStrapi();
         function openClose () {
             state.value = !state.value
         }

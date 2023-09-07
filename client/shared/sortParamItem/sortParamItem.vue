@@ -1,9 +1,9 @@
 <template>
-    <NuxtLink :to="context.query['param[]'] ? check.length ? {query: {type: context.query.type, 'param[]': [...check]}} : {query: {type: context.query.type, 'param[]': [...context.query['param[]'], id]}} :{query: {type: context.query.type, 'param[]': [id]}}" @click="onClick" :class="active ? 'param__value value__active' : 'param__value'">{{ title }}</NuxtLink>
+    <div @click="onClick" :class="active ? 'param__value value__active' : 'param__value'">{{ title }}</div>
 </template>
 
 <script>
-import { useParams } from '~/state/states';
+import { useParams, useSortParams } from '~/state/states';
 export default {
     name: 'sortParamItem',
     props: [
@@ -17,41 +17,48 @@ export default {
         const context = useRoute();
         console.log(context.query)
         const params = useParams();
+        const sortParams = useSortParams();
         const check = ref([]);
         // console.log(props.ids)
-        watch(context, (newVal)=>{
-            if(context.query['param[]']){
-            context.query['param[]'].forEach((value, index)=>{
-            if(props.ids.includes(+value)){
-                // check.value.id = value;
-                // check.value.index = index
-                let arr = context.query['param[]'].map((v, ind)=>{
-                    if(ind == index){
-                        return props.id
-                    } 
-                    return v
-                })
-                check.value = arr
-                console.log(arr)
-            }
-            })
-        }else {
-            check.value = []
-        }
-        },{deep: true})
+        // watch(context, (newVal)=>{
+        //     if(context.query['param[]']){
+        //     context.query['param[]'].forEach((value, index)=>{
+        //     if(props.ids.includes(+value)){
+        //         // check.value.id = value;
+        //         // check.value.index = index
+        //         let arr = context.query['param[]'].map((v, ind)=>{
+        //             if(ind == index){
+        //                 return props.id
+        //             } 
+        //             return v
+        //         })
+        //         check.value = arr
+        //         console.log(arr)
+        //     }
+        //     })
+        // }else {
+        //     check.value = []
+        // }
+        // },{deep: true})
 
         function onClick() {
+
             params.value.data.forEach((value)=>{
                 if(value.id == props.param_id){
                     value.attributes.param_values.data.forEach((innerValue)=>{
                         if(innerValue.id == props.id && !innerValue.active){
                             innerValue.active = true
+                            sortParams.value.push({param_values: innerValue.id})
                         } else {
                             innerValue.active = false
+                            let ind = sortParams.value.findIndex((value)=> value.param_values == innerValue.id)
+                            sortParams.value.splice(ind, 1)
                         }
                     })
                 }
             })
+            console.log(sortParams.value)
+            
         }
         return {onClick, context, check}
     }

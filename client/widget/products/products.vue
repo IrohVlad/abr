@@ -2,7 +2,7 @@
 import product from '~/feature/product/product.vue'
 import sortParams from '~/feature/sortParams/sortParams.vue'
 import productTypes from '~/feature/productTypes/productTypes.vue'
-import {useCards, useParams} from '~/state/states.js'
+import {useCards, useParams, useSortParams} from '~/state/states.js'
 export default {
     name: 'products',
     components: {
@@ -13,9 +13,40 @@ export default {
     async setup() {
         const cards = useCards();
         const params = useParams();
+        const paramsArray = useSortParams();
         const {find} = useStrapi();
+        const context = useRoute()
+        const type = computed(() => context.params.type)
+        const par = computed(() => paramsArray.value.length)
+        // const compContext = computed()
 
-        const {data: pro, error, refresh} = await useAsyncData('products', ()=> find('products?fields[0]=title&fields[1]=details&fields[2]=price&populate[0]=photo'))
+        const {data: pro, error, refresh} = await useAsyncData('products', ()=> find('products',
+        {
+                                fields: [
+                                    'title',
+                                    'details',
+                                    'price'
+                                ],
+                                pagination: {
+                                    page: context.params.page,
+                                    pageSize: 10
+                                },
+                                populate: [
+                                    'photo'
+                                ],
+                                filters: type.value ? {
+                                    $and: paramsArray.value.length ? [
+                                        {
+                                         type: type.value
+                                        },
+                                        ...paramsArray.value
+                                    ] : [
+                                        {
+                                            type: type.value
+                                        }
+                                    ]
+                                } : undefined
+                                }))
 
         if(pro.value){
             cards.value.data = pro.value.data;
@@ -36,11 +67,23 @@ export default {
             } else if (error) {
                 cards.value.errors = error;
                 cards.value.loading = false;
-                cards.log( error)
+                console.log( error)
             }
 
         }
-      return {cards, params, reloadPro}
+        // watch(context, ()=>{
+        //     console.log('watch worked' + context.params.type)
+        //     reloadPro()
+        // }, {deep: true})
+
+        watch(par, ()=>{
+            console.log('watch worked' + type.value)
+            // if(par != 0){
+            //     reloadPro()
+            // }
+            reloadPro()
+        })
+      return {cards, params, reloadPro, context}
     }
 }
 </script>
@@ -51,7 +94,7 @@ export default {
             <div class="products-sidebar">
                 <div class="sidebar">
                     <productTypes/>
-                    <sortParams/>
+                    <sortParams v-if="context.params.type" />
                 </div>
             </div>
             <div class="products">
@@ -99,6 +142,34 @@ export default {
             display: grid;
             gap: 20px;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+    }
+    @media(max-width: 530px){
+        .products-grid{
+            display: grid;
+            grid-template-columns: 1fr;
+            // grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            .products-sidebar{
+                .sidebar{
+                    width: 100%;
+                    height: fit-content;
+                    min-height: 500px;
+                    background-color: rgb(17, 17, 17);
+                    border-radius: 10px;
+                    padding: 15px;
+                    box-sizing: border-box;
+                    
+                    .params{
+                        color: white;
+                    }
+                }
+            }
+            .products{
+                display: grid;
+                gap: 20px;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
         }
     }
     

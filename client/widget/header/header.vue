@@ -55,7 +55,8 @@
                 <nav>
                     <ul class="nav">
                         <NuxtLink to="/" class="nav-item _no-select">Главная</NuxtLink>
-                    <NuxtLink to="/contacts" class="nav-item _no-select">О нас</NuxtLink>
+                        <NuxtLink to="/products/page-1" class="nav-item _no-select">Товары</NuxtLink>
+                        <NuxtLink to="/contacts" class="nav-item _no-select">О нас</NuxtLink>
                     </ul>
                 </nav>
                 <div class="right">
@@ -71,6 +72,7 @@
                 <nav>
                 <ul class="nav">
                     <NuxtLink to="/" class="nav-item _no-select">Главная</NuxtLink>
+                    <NuxtLink to="/products/page-1" class="nav-item _no-select">Товары</NuxtLink>
                     <NuxtLink to="/contacts" class="nav-item _no-select">О нас</NuxtLink>
                 </ul>
             </nav>

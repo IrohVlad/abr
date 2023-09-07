@@ -1,5 +1,5 @@
 <template>
-    <NuxtLink :to="''+id">
+    <NuxtLink :to="'/'+id">
         <div class="product">
         <div class="product__img">
             <img :src="img ? 'https://all-trader.ru'+img.attributes.url : ''" alt="">
@@ -32,6 +32,8 @@ export default {
             cursor: pointer;
             background-color: white;
             padding: 15px;
+            height: 100%;
+            box-sizing: border-box;
             box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.213);
             border-radius: 5px;
             transition-property: box-shadow, transform;

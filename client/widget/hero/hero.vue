@@ -60,7 +60,7 @@ export default {
             } else if (error) {
                 slides.value.errors = error;
                 slides.value.loading = false;
-                slides.log( error)
+                // slides.log( error)
             }
 
         }
@@ -135,7 +135,6 @@ export default {
         }
     }
     .hero-section{
-        margin-top: 130px;
         position: relative;
         height: calc(100vh - 130px);
         .background{

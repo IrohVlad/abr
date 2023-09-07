@@ -1,6 +1,6 @@
 <template>
     <div v-if="!params.loading && !params.errors" class="params">
-        <sortParam v-for="param in params.data" :id="param.id" :title="param.attributes.title" :values="param.attributes.param_values" />
+        <sortParam v-for="param in params.data" :key="param.id" :id="param.id" :title="param.attributes.title" :values="param.attributes.param_values" />
     </div>
 </template>
 
@@ -18,7 +18,32 @@ export default {
         const types = useTypes();
         const {find} = useStrapi();
         const context = useRoute()
-
+        if(context.params.type){
+            const {data: par, error: parErr} = await useAsyncData('params', ()=> find('params',
+                            {
+                                fields: [
+                                    'title',
+                                ],
+                                populate: [
+                                    'param_values'
+                                ],
+                                filters: context.params.type ? {
+                                    $and: [
+                                        {
+                                            type: context.params.type 
+                                        }
+                                    ]
+                                } : undefined
+                            }))
+                            if(par.value){
+                                params.value.data = par.value.data;
+                                params.value.loading = false;
+                            } else if (parErr) {
+                                params.value.errors = parErr;
+                                params.value.loading = false;
+                                console.log( parErr)
+        }
+                            }
         // watch(context, async (newContext) => {
         //     const typeId = newContext.query.type;
         //     const 

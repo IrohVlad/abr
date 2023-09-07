@@ -194,6 +194,10 @@ export default {
     margin: 0 auto;
     box-sizing: border-box;
   }
+  main{
+    min-height: calc(100vh - 130px);
+    margin-top: 130px;
+  }
   @media(max-width: 600px) {
     ._container{
       padding: 5px 12px;

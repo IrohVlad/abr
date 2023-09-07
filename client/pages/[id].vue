@@ -1,19 +1,24 @@
 <template>
     <main>
         <section class="about-product-section _container">
-            <div class="about-product">
+            <div v-if="!data.loading && !data.errors" class="about-product">
                 <div class="title">
-                    {{ data.title }}
+                    {{ data.data.attributes.title }}
                 </div>
                 <div class="icon">
-                    <img :src="'https://all-trader.ru'+data.photo.data.attributes.url" alt="">
+                    <img :src="'https://all-trader.ru'+data.data.attributes.photo.data.attributes.url" alt="">
                 </div>
                 <div class="line">
-                    <div class="price">{{ data.price + '₽' }}</div>
-                    <div v-html="$mdRenderer.render(data.details)" class="details"></div>
+                    <div class="price">{{ data.data.attributes.price + '₽' }}</div>
+                    <div v-html="$mdRenderer.render(data.data.attributes.details)" class="details"></div>
                 </div>
-                <div v-html="$mdRenderer.render(data.description)" class="desscription"></div>
+                <div v-html="$mdRenderer.render(data.data.attributes.description)" class="desscription"></div>
             </div>
+            <div v-else-if="data.errors" class="hero _container">
+            <div @click="reloadProd" class="reload-hero">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z" fill="rgb(17, 17, 17)"/></svg>
+            </div>
+        </div>
         </section>
     </main>
 </template>
@@ -23,10 +28,9 @@ export default {
     async setup(){
         const {findOne} = useStrapi();
         const params = useRoute()
-        const data = ref({})
+        const data = ref({data: {}, errors: null, loading: true})
 
-        try{
-            let response = await findOne(`products`,
+        const {data: prod, error, refresh} = await useAsyncData('product',()=> findOne(`products`,
             params.params.id,
                         {
                             fields: [
@@ -38,20 +42,36 @@ export default {
                             populate: [
                                 'photo'
                             ]
-                        });
-                        console.log(response)
-                        data.value = response.data.attributes
-        } catch {
-
+                        }))
+        if(prod.value){
+            data.value.data = prod.value.data;
+            data.value.loading = false
+        } else if (error){
+            console.log(error)
+            data.value.errors = error;
+            data.value.loading = false
         }
-        return {data}
+
+        async function reloadProd(){
+            data.value.errors = null;
+            data.value.loading = true;
+            await refresh()
+            if(prod.value){
+                data.value.data = prod.value.data;
+                data.value.loading = false
+            } else if (error){
+                data.value.errors = error;
+                data.value.loading = false
+            }
+        }
+        return {data, reloadProd}
     }
 }
 </script>
 
 <style lang="scss">
 main{
-    margin-top: 150px;
+    // margin-top: 150px;
     .about-product-section{
         .about-product{
             .title{

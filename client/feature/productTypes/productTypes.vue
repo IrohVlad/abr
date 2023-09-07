@@ -29,7 +29,8 @@ export default {
         })
         
 
-        const {data: typ, error, refresh} = await useAsyncData('types', ()=> find('types?fields[0]=title'))
+        const {data: typ, error, refresh} = await useAsyncData('types', ()=> find('types?fields[0]=title',
+        ))
 
         if(typ.value){
             types.value.data = typ.value.data;
@@ -54,66 +55,66 @@ export default {
 
         }
 
-        watch(queries, async (newContext, oldContext)=>{
-            if(!oldContext || oldContext.type != newContext.type){
-                types.value.data.forEach(element => {
-                if(element.id == newContext.type && !element.active){
-                    element.active = true
-                } else {
-                    element.active = false
-                }
-                });
-                const {data: pro, error: proErr} = await useAsyncData('products', ()=> find('products',
-                                {
-                                fields: [
-                                    'title',
-                                    'details',
-                                    'price'
-                                ],
-                                populate: [
-                                    'photo'
-                                ],
-                                filters: {
-                                    $and: [
-                                        {
-                                            type: newContext.type
-                                        }
-                                    ]
-                                }
-                                }))
-                                const {data: par, error: parErr} = await useAsyncData('params', ()=> find('params',
-                            {
-                                fields: [
-                                    'title',
-                                ],
-                                populate: [
-                                    'param_values'
-                                ],
-                                filters: {
-                                    $and: [
-                                        {
-                                            type: newContext.type
-                                        }
-                                    ]
-                                }
-                            }))
-                            if(pro.value && par.value){
-                                cards.value.data = pro.value.data;
-                                params.value.data = par.value.data;
-                                params.value.loading = false;
-                                cards.value.loading = false;
-                            } else if (parErr || proErr) {
-                                cards.value.errors = proErr;
-                                params.value.errors = parErr;
-                                cards.value.loading = false;
-                                params.value.loading = false;
-                                console.log( parErr, proErr)
-                            }
-            } else if(oldContext.type == newContext.type) { 
+        // watch(queries, async (newContext, oldContext)=>{
+        //     if(!oldContext || oldContext.type != newContext.type){
+        //         types.value.data.forEach(element => {
+        //         if(element.id == newContext.type && !element.active){
+        //             element.active = true
+        //         } else {
+        //             element.active = false
+        //         }
+        //         });
+        //         const {data: pro, error: proErr} = await useAsyncData('products', ()=> find('products',
+        //                         {
+        //                         fields: [
+        //                             'title',
+        //                             'details',
+        //                             'price'
+        //                         ],
+        //                         populate: [
+        //                             'photo'
+        //                         ],
+        //                         filters: {
+        //                             $and: [
+        //                                 {
+        //                                     type: newContext.type
+        //                                 }
+        //                             ]
+        //                         }
+        //                         }))
+        //                         const {data: par, error: parErr} = await useAsyncData('params', ()=> find('params',
+        //                     {
+        //                         fields: [
+        //                             'title',
+        //                         ],
+        //                         populate: [
+        //                             'param_values'
+        //                         ],
+        //                         filters: {
+        //                             $and: [
+        //                                 {
+        //                                     type: newContext.type
+        //                                 }
+        //                             ]
+        //                         }
+        //                     }))
+        //                     if(pro.value && par.value){
+        //                         cards.value.data = pro.value.data;
+        //                         params.value.data = par.value.data;
+        //                         params.value.loading = false;
+        //                         cards.value.loading = false;
+        //                     } else if (parErr || proErr) {
+        //                         cards.value.errors = proErr;
+        //                         params.value.errors = parErr;
+        //                         cards.value.loading = false;
+        //                         params.value.loading = false;
+        //                         console.log( parErr, proErr)
+        //                     }
+        //     } else if(oldContext.type == newContext.type) { 
                 
-            }
+        //     }
             
-        }, {deep: true, immediate: true})
+        // }, {deep: true, immediate: true})
 
       return {types, reloadTyp}
     }
