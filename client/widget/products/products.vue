@@ -2,18 +2,21 @@
 import product from '~/feature/product/product.vue'
 import sortParams from '~/feature/sortParams/sortParams.vue'
 import productTypes from '~/feature/productTypes/productTypes.vue'
-import {useCards, useParams, useSortParams} from '~/state/states.js'
+import paginator from '../paginator/paginator.vue'
+import {useCards, useParams, usePages, useSortParams} from '~/state/states.js'
 export default {
     name: 'products',
     components: {
         product,
         sortParams,
-        productTypes
+        productTypes,
+        paginator
     },
     async setup() {
         const cards = useCards();
         const params = useParams();
         const paramsArray = useSortParams();
+        const pages = usePages();
         const {find} = useStrapi();
         const context = useRoute()
         const type = computed(() => context.params.type)
@@ -50,9 +53,13 @@ export default {
 
         if(pro.value){
             cards.value.data = pro.value.data;
+            pages.value.data = pro.value.meta
+            pages.value.current = context.params.page;
             cards.value.loading = false;
         } else if (error) {
             cards.value.errors = error;
+            pages.value.data = {}
+            pages.value.current = null;
             cards.value.loading = false;
           console.log( error)
         }
@@ -63,9 +70,13 @@ export default {
             await refresh()
             if(pro.value){
                 cards.value.data = pro.value.data;
+                pages.value.data = pro.value.meta
+                pages.value.current = context.params.page;
                 cards.value.loading = false;
             } else if (error) {
                 cards.value.errors = error;
+                pages.value.data = {}
+            pages.value.current = null;
                 cards.value.loading = false;
                 console.log( error)
             }
@@ -104,6 +115,7 @@ export default {
                 </div>
             </div>
         </div>
+        <paginator v-if="!cards.loading && !cards.errors"/>
     </section>
 </template>
 
